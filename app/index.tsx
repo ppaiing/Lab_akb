@@ -47,7 +47,7 @@ export default function Index() {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 18, color: "black", fontWeight: "bold" }}>
+        <Text style={{ fontSize: 19, color: "black", fontWeight: "bold" }}>
           A. Fachri
         </Text>
       </View>
