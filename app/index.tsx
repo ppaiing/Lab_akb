@@ -1,77 +1,100 @@
-import { Text, View, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { View, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 
-export default function Index() {
+// Import semua gambar lokal
+const mainImages = [
+  require('../assets/images/main0.jpg'),
+  require('../assets/images/main1.jpg'),
+  require('../assets/images/main2.jpg'),
+  require('../assets/images/main3.jpg'),
+  require('../assets/images/main4.jpg'),
+  require('../assets/images/main5.jpg'),
+  require('../assets/images/main6.jpg'),
+  require('../assets/images/main7.png'),
+  require('../assets/images/main8.jpg'),
+];
+
+const altImages = [
+  require('../assets/images/alt0.jpg'),
+  require('../assets/images/alt1.jpg'),
+  require('../assets/images/alt2.jpg'),
+  require('../assets/images/alt3.jpeg'),
+  require('../assets/images/alt4.jpg'),
+  require('../assets/images/alt5.jpg'),
+  require('../assets/images/alt6.jpg'),
+  require('../assets/images/alt7.jpg'),
+  require('../assets/images/alt8.png'),
+];
+
+export default function IndexPage() {
+  const [imageStates, setImageStates] = useState(
+    Array.from({ length: 9 }, () => ({
+      isAlt: false,
+      scale: 1.0,
+    }))
+  );
+
+  const handlePress = (index: number) => {
+    setImageStates(prev =>
+      prev.map((state, i) => {
+        if (i !== index) return state;
+        const newScale = Math.min(state.scale * 1.2, 2.0);
+        return {
+          isAlt: !state.isAlt,
+          scale: parseFloat(newScale.toFixed(2)),
+        };
+      })
+    );
+  };
+
+  const screenWidth = Dimensions.get('window').width;
+  const itemSize = screenWidth / 3 - 20;
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.grid}>
+        {mainImages.map((mainImg, index) => {
+          const { isAlt, scale } = imageStates[index];
+          const imageSource = isAlt ? altImages[index] : mainImg;
 
-      {/* Segitiga Merah */}
-      <View style={styles.triangle} />
-      <Text style={styles.label}></Text>
-
-      {/* Bentuk Pil dengan ID Siswa */}
-      <View style={styles.pill}>
-        <Text style={styles.pillText}>105841106522</Text>
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handlePress(index)}
+              activeOpacity={0.8}
+            >
+              <Image
+                source={imageSource}
+                style={[
+                  styles.image,
+                  {
+                    width: itemSize,
+                    height: itemSize,
+                    transform: [{ scale }],
+                  },
+                ]}
+              />
+            </TouchableOpacity>
+          );
+        })}
       </View>
-      <Text style={styles.label}></Text>
-
-      {/* Persegi Panjang dengan Nama */}
-      <View style={styles.rectangle}>
-        <Text style={styles.nameText}>A. Fachri</Text>
-      </View>
-      <Text style={styles.label}></Text>
-
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    padding: 10,
+    alignItems: 'center',
   },
-  triangle: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 50,
-    borderRightWidth: 50,
-    borderBottomWidth: 100,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "red",
-    marginBottom: 5,
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
-  pill: {
-    width: 140,
-    height: 50,
-    backgroundColor: "blue",
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  pillText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  rectangle: {
-    width: 200,
-    height: 60,
-    backgroundColor: "orange",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  nameText: {
-    fontSize: 19,
-    color: "black",
-    fontWeight: "bold",
-  },
-  label: {
-    marginBottom: 10,
-    fontSize: 14,
-    color: "#444",
+  image: {
+    margin: 5,
+    borderRadius: 8,
+    backgroundColor: '#eee',
   },
 });
