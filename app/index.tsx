@@ -1,100 +1,59 @@
-import React, { useState } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { ScrollView, Text, View, StyleSheet } from "react-native";
 
-// Import semua gambar lokal
-const mainImages = [
-  require('../assets/images/main0.jpg'),
-  require('../assets/images/main1.jpg'),
-  require('../assets/images/main2.jpg'),
-  require('../assets/images/main3.jpg'),
-  require('../assets/images/main4.jpg'),
-  require('../assets/images/main5.jpg'),
-  require('../assets/images/main6.jpg'),
-  require('../assets/images/main7.png'),
-  require('../assets/images/main8.jpg'),
+const data = [
+  { name: "Andi Difta Ramaeyza Kaila", nim: "10584116022", font: "lato-bold", color: "blue" },
+  { name: "Arsifah Ainun Auliah", nim: "1058411056122", font: "OpenSans_Condensed-Bold" },
+  { name: "Tegar Surya Prayoga", nim: "105841106222", font: "poppins-bold" },
+  { name: "Andi Angke Riona Megawan", nim: "105841106322", font: "spacemono-regular" },
+  { name: "A.Fachri", nim: "105841106522", font: "Roboto_Condensed-Bold", color: "red" },
+  { name: "Alizha Nur Arspandy", nim: "105841105722", font: "ibmplex-variable" },
+  { name: "Yaumul Furqan", nim: "105841106822", font: "inter-variable" },
+  { name: "Baso Hamzah", nim: "105841106922", font: "montserrat-variable" },
+  { name: "Indah Nur Fauziah.A", nim: "105841107022", font: "raleway-variable" },
+  { name: "Zalna Nur Islamiah", nim: "105841107122", font: "sora-variable", color: "blue" },
 ];
 
-const altImages = [
-  require('../assets/images/alt0.jpg'),
-  require('../assets/images/alt1.jpg'),
-  require('../assets/images/alt2.jpg'),
-  require('../assets/images/alt3.jpeg'),
-  require('../assets/images/alt4.jpg'),
-  require('../assets/images/alt5.jpg'),
-  require('../assets/images/alt6.jpg'),
-  require('../assets/images/alt7.jpg'),
-  require('../assets/images/alt8.png'),
-];
-
-export default function IndexPage() {
-  const [imageStates, setImageStates] = useState(
-    Array.from({ length: 9 }, () => ({
-      isAlt: false,
-      scale: 1.0,
-    }))
-  );
-
-  const handlePress = (index: number) => {
-    setImageStates(prev =>
-      prev.map((state, i) => {
-        if (i !== index) return state;
-        const newScale = Math.min(state.scale * 1.2, 2.0);
-        return {
-          isAlt: !state.isAlt,
-          scale: parseFloat(newScale.toFixed(2)),
-        };
-      })
-    );
-  };
-
-  const screenWidth = Dimensions.get('window').width;
-  const itemSize = screenWidth / 3 - 20;
-
+export default function Index() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.grid}>
-        {mainImages.map((mainImg, index) => {
-          const { isAlt, scale } = imageStates[index];
-          const imageSource = isAlt ? altImages[index] : mainImg;
-
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handlePress(index)}
-              activeOpacity={0.8}
-            >
-              <Image
-                source={imageSource}
-                style={[
-                  styles.image,
-                  {
-                    width: itemSize,
-                    height: itemSize,
-                    transform: [{ scale }],
-                  },
-                ]}
-              />
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+      {data.map((item, index) => (
+        <View key={index} style={styles.card}>
+          <Text style={[styles.name, { fontFamily: item.font, color: item.color || "#000" }]}>
+            {item.name}
+          </Text>
+          <Text style={[styles.nim, { fontFamily: item.font, color: item.color || "#000" }]}>
+            {item.nim}
+          </Text>
+        </View>
+      ))}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    alignItems: 'center',
+    padding: 16,
+    gap: 12,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+  card: {
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  image: {
-    margin: 5,
-    borderRadius: 8,
-    backgroundColor: '#eee',
+  name: {
+    fontSize: 16,
+    flex: 1,
+  },
+  nim: {
+    fontSize: 16,
+    textAlign: "right",
   },
 });
